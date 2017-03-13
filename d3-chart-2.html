@@ -22,7 +22,7 @@
           { label: 'Jun', additions: 661, deletions: 238 },
         ];
 
-		var margin = {left:10, right:10, top:5, bottom:30};
+		var margin = {left:10, right:10, top:10, bottom:30};
 		var width = 600;
 		var height = 400;
 		var barwidth = 50;
@@ -36,9 +36,6 @@
 			.padding(0.3)
 			.domain(dataset.map(function(d) {return d.label}));
 		
-		var xAxis = d3.axisBottom(x);
-		var yAxis = d3.axisLeft(y);
-		
 		var svg = d3.select('#chart2')
 			.append("svg")
 			.attr("width", width + margin.left + margin.right)
@@ -46,12 +43,23 @@
 			.append("g")
 			.attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 		
-		svg.append("g")
-		.attr("transform", "translate(0," + height + ")")
-		.call(xAxis);
+		var xAxis = d3.axisBottom(x)
+			.tickSizeOuter(0);
 		
 		svg.append("g")
-		.call(yAxis);
+		.attr("transform", "translate(0," + height + ")")
+		.attr('class','x-axis')
+		.call(xAxis);
+		
+		/*
+		var yAxis = d3.axisLeft(y)
+			.ticks(3)
+			.tickSizeOuter(0);
+		
+		svg.append("g")
+		.call(yAxis)
+		.attr('class','y-axis');
+		*/
 		
 		var g = svg
 			.append("g");
@@ -60,8 +68,8 @@
 			.data(dataset)
 			.enter().append('rect')
 			.attr("x", function(d) {return x(d.label)})
-			.attr("height", function(d) {return y(d.additions)})
 			.attr("y", function(d) {return (height - y(d.additions)) + "px";})
+			.attr("height", function(d) {return y(d.additions)})
 			.attr("width", x.bandwidth())
 			.attr("fill","#22BB55");
 			
@@ -73,24 +81,7 @@
 			.attr("height", function(d) {return y(d.deletions)})
 			.attr("width", x.bandwidth())
 			.attr("fill","#EE3322");
-			
-		/*
-        var barAdditions = g.selectAll("g")
-			.data(dataset)
-			.enter().append('rect')
-			.attr("transform", function(d,i) {return "translate(" + i * (barwidth + margin.left + margin.right) + ", " + (height - y(d.additions)) + ")";})
-			.attr("height", function(d) {return y(d.additions) + "px";})
-			.attr("width", barwidth + "px")
-			.attr("fill","#22BB55");
 		
-		var barDeletions = g.selectAll("g")
-			.data(dataset)
-			.enter().append('rect')
-			.attr("transform", function(d,i) {return "translate(" + i * (barwidth + margin.left + margin.right) + ", " + (height - y(d.additions) - y(d.deletions)) + ")";})
-			.attr("height", function(d) {return x(d.deletions) + "px";})
-			.attr("width", barwidth + "px")
-			.attr("fill","#EE3322");
-		*/
 		var tooltip = d3.select('#chart2').
 			append('div')
 			.attr('class','tooltip');
@@ -99,34 +90,50 @@
 			.attr('class', 'label');
 		
 		tooltip.append('div')
+			.attr('class', 'deletions');
+			
+		tooltip.append('div')
 			.attr('class', 'additions');
 			
 		tooltip.append('div')
-			.attr('class', 'deletions');
+			.attr('class', 'total');
 			
-		barAdditions.on('mouseover', function(d) {
-			tooltip.select('.label').html(d.label);
-			tooltip.select('.additions').html(d.additions).style('font-weight', 'bold');
-			tooltip.select('.deletions').html(d.deletions);
-			tooltip.style('display', 'block');
-		});
+		var tooltipMouseover = function(selection) {
+			return function(d) {
+				tooltip.select('.label').html(d.label);
+				tooltip.select('.additions').html(d.additions);
+				tooltip.select('.deletions').html(d.deletions);
+				tooltip.select('.total').html(d.additions + d.deletions);
+				tooltip.select(selection).classed('selected', true);
+				tooltip.style('display', 'block');
+				tooltip.style('left', (d3.event.pageX + 10) + "px");
+				tooltip.style('top', (d3.event.pageY + 10) + "px");
+			}
+		}
 		
-		barAdditions.on('mouseout', function(d) {
-			tooltip.select('.additions').html(d.deletions).style('font-weight', 'normal');
-			tooltip.style('display','none');
-		});
+		var tooltipMousemove = function(selection) {
+			return function(d) {
+				tooltip.style('left', (d3.event.pageX + 10) + "px");
+				tooltip.style('top', (d3.event.pageY + 10) + "px");
+			}
+		}
 		
-		barDeletions.on('mouseover', function(d) {
-			tooltip.select('.label').html(d.label);
-			tooltip.select('.additions').html(d.additions);
-			tooltip.select('.deletions').html(d.deletions).style('font-weight', 'bold');
-			tooltip.style('display', 'block');
-		});
+		var tooltipMouseout = function(selection) {
+			return function(d) {
+				tooltip.style('display','none');
+				tooltip.select(selection).classed('selected', false);
+			}
+		}
 		
-		barDeletions.on('mouseout', function(d) {
-			tooltip.select('.deletions').html(d.deletions).style('font-weight', 'normal');
-			tooltip.style('display','none');
-		});
+		barAdditions
+			.on('mouseover', tooltipMouseover('.additions'))
+			.on('mousemove', tooltipMousemove('.additions'))
+			.on('mouseout', tooltipMouseout('.additions'));
+		barDeletions
+			.on('mouseover', tooltipMouseover('.deletions'))
+			.on('mousemove', tooltipMousemove('.deletions'))
+			.on('mouseout', tooltipMouseout('.deletions'));
+		
       })(window.d3);
     </script>
   </body>

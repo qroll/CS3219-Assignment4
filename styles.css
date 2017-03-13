@@ -16,17 +16,49 @@ rect {
 	position: relative;
 }
 
+.x-axis {
+	font-size: 12px;
+}
+
 .tooltip {
-	background:	#eee;
+	width: auto;
+	padding: 10px;
+	background:	#fff;
 	box-shadow:	0 0	5px	#999999;
 	color: #333;
-	display: none;
 	font-size: 12px;
-	left: 130px;
-	padding: 10px;
+	text-align:	left;
 	position: absolute;
-	text-align:	center;
-	top: 95px;
-	width: auto;
 	z-index: 10;
+	display: none;
+}
+
+.tooltip .label {
+	text-transform: uppercase;
+	font-weight: narrow;
+	margin-bottom: 10px;
+}
+
+.tooltip .additions::before {
+	content: "Additions: "
+}
+
+.tooltip .deletions::before {
+	content: "Deletions: "
+}
+
+.tooltip .total {
+	position: relative;
+	right: 0;
+	border-top: solid 1px #bbb;
+	margin-top: 10px;
+	padding-top: 10px;
+}
+
+.tooltip .total::before {
+	content: "Total: "
+}
+
+.selected {
+	font-weight: bold;
 }
