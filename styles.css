@@ -62,3 +62,64 @@ rect {
 .selected {
 	font-weight: bold;
 }
+
+.q3body {
+    background-color: #ccc;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+}
+
+.widget {
+    margin: 0 auto;
+    width:1100px;
+    margin-top:50px;
+    background-color:#fff;
+    -background-color: #222D3A;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.3);
+
+}
+
+.header{
+    background-color: #eee;
+    height:40px;
+    width: 1100px;
+    color:#555;
+    text-align: center;
+    line-height: 40px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    font-weight: 400;
+    font-size: 1.5em;
+    text-shadow: 1px 1px #fff;
+    border-bottom: 1px solid #eaeaea;
+}
+
+
+.chart3-container{
+    padding:25px;
+    width: 1100px;
+    height: 550px;
+    position: relative;
+}
+
+.xAxisQ3 path,
+.xAxisQ3 line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.xAxisQ3-label {
+	position: absolute;
+	top: 525px;
+	width: 1100px;
+	text-align: center;
+	font-weight: bold;
+}
+
+
+
+
+
