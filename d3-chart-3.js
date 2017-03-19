@@ -73,8 +73,8 @@ svg.append("g")
 .call(xAxis);
 
 // Returns an array of 2 data sets
-// First is: [ {x: date, y: sum of commits}, ... ] for authors of name starting with "n-z"
-// Second is: [ {x: date, y: sum of commits}, ... ] for authors of name starting with "a-m"
+// First is: [ {x: baseline (which equals zero), y: sum of commits}, ... ] for authors of name starting with "n-z"
+// Second is: [ {x: baseline (which equals zero), y: sum of commits}, ... ] for authors of name starting with "a-m"
 // Each element in the input data set represents the data set for 1 layer in the stack component.
 // In this case, we have 2 layers, one for 'a-m' and one for 'n-z'
 var dataStackLayout = d3.stack()
