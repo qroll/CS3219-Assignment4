@@ -37,36 +37,52 @@ var data = [
 
 var xData = ['n-z', 'a-m'];
 
+// Defining margins in an object
 var margin = {top: 20, right: 50, bottom: 30, left: 20},
         width = 1000 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
+// Defining a scale and setting the range of the x axis
 var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .35);
 
+// Defining a scale and setting the range of the y axis
 var y = d3.scale.linear()
         .rangeRound([height, 0]);
 
 var color = d3.scale.category20();
 
+// Create an axis object that scales according the the ranged defined by x variable before
 var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
 
-var svg = d3.select("#chart").append("svg")
+// Select HTML placeholder called "chart"
+// Add "svg" element to it
+// Add "width" and "height" attributes for the svg
+// Group the elements together before translating the entire object by the left and top margins
+var svg = d3.select("#chart")
+        .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
+// Returns an array of 2 data sets
+// First is: [ {x: date, y: sum of commits}, ... ] for authors of name starting with "n-z"
+// Second is: [ {x: date, y: sum of commits}, ... ] for authors of name starting with "a-m"
 var dataIntermediate = xData.map(function (c) {
     return data.map(function (d) {
         return {x: d.date, y: d[c]};
     });
 });
 
+// Feeding in the intermediate date set into the stack() object/function
+// Each element in the input data set represents the data set for 1 layer in the stack component.
+// In this case, we have 2 layers, one for 'a-m' and one for 'n-z'
 var dataStackLayout = d3.layout.stack()(dataIntermediate);
+
 
 x.domain(dataStackLayout[0].map(function (d) {
     return d.x;
@@ -78,6 +94,9 @@ y.domain([0,
     ])
   .nice();
 
+// Creating the svg for the stacked bars svg
+// Feed the data formatted for the stacked graph into the svg
+// Assign its css class to be "stack" and color it
 var layer = svg.selectAll(".stack")
         .data(dataStackLayout)
         .enter().append("g")
