@@ -71,9 +71,10 @@ path
 			return d.count;
 		}));
 		
+		var commitWord = d.data.count == 1 ? "commit" : "commits";
 		var	percent = Math.round(1000 * d.data.count / total) / 10;
 		tooltip.select('.label').html(d.data.label);
-		tooltip.select('.count').html(d.data.count + " commits (" + percent + "%)");
+		tooltip.select('.count').html(d.data.count + " " + commitWord + " (" + percent + "%)");
 		
 		tooltip.style('display', 'block');
 		tooltip.style('left', (d3.event.pageX + 10) + "px");

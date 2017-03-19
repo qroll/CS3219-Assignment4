@@ -52,24 +52,12 @@ path {
 	white-space: nowrap;
 }
 
-.tooltip .additions::before {
-	content: "Additions: "
-}
-
-.tooltip .deletions::before {
-	content: "Deletions: "
-}
-
 .tooltip .total {
 	position: relative;
 	right: 0;
 	border-top: solid 1px #bbb;
 	margin-top: 10px;
 	padding-top: 10px;
-}
-
-.tooltip .total::before {
-	content: "Total: "
 }
 
 .selected {
