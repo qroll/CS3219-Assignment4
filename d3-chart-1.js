@@ -77,12 +77,12 @@ path
 		tooltip.select('.count').html(d.data.count + " " + commitWord + " (" + percent + "%)");
 		
 		tooltip.style('display', 'block');
-		tooltip.style('left', (d3.event.pageX + 10) + "px");
-		tooltip.style('top', (d3.event.pageY + 10) + "px");
+		tooltip.style('left', (d3.mouse(this)[0]) + "px");
+		tooltip.style('top', (d3.mouse(this)[1]) + "px");
 	})
 	.on('mousemove', function(d) {
-		tooltip.style('left', (d3.event.pageX + 10) + "px");
-		tooltip.style('top', (d3.event.pageY + 10) + "px");
+		tooltip.style('left', (d3.mouse(this)[0] + 550) + "px");
+		tooltip.style('top', (d3.mouse(this)[1] + 250) + "px");
 	})
 	.on('mouseout', function(d) {
 		d3.select(this)

@@ -75,9 +75,6 @@ var tooltip = d3.select('#chart2').
 	.attr('class','tooltip');
 
 tooltip.append('div')
-	.attr('class', 'label');
-
-tooltip.append('div')
 	.attr('class', 'deletions');
 	
 tooltip.append('div')
@@ -88,8 +85,6 @@ tooltip.append('div')
 	
 var tooltipMouseover = function(selection) {
 	return function(d) {
-		tooltip.select('.label').html(d.label);
-		
 		var additionWord = d.additions == 1 ? "addition" : "additions";
 		var deletionWord = d.deletions == 1 ? "deletion" : "deletions";
 		
@@ -98,15 +93,15 @@ var tooltipMouseover = function(selection) {
 		tooltip.select('.total').html(d.additions + d.deletions + " in total");
 		tooltip.select(selection).classed('selected', true);
 		tooltip.style('display', 'block');
-		tooltip.style('left', (d3.event.pageX + 10) + "px");
-		tooltip.style('top', (d3.event.pageY + 10) + "px");
+		tooltip.style('left', (d3.mouse(this)[0]) + "px");
+		tooltip.style('top', (d3.mouse(this)[1]) + "px");
 	}
 }
 
 var tooltipMousemove = function(selection) {
 	return function(d) {
-		tooltip.style('left', (d3.event.pageX + 10) + "px");
-		tooltip.style('top', (d3.event.pageY + 10) + "px");
+		tooltip.style('left', (d3.mouse(this)[0] + 230) + "px");
+		tooltip.style('top', (d3.mouse(this)[1] + 40) + "px");
 	}
 }
 

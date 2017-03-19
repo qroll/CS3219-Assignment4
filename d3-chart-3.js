@@ -35,51 +35,47 @@ var data = [
     {'date': 31, 'n-z': 0, 'a-m': 0}
 ];
 
-var xData = ['n-z', 'a-m'];
+var keys = ['n-z', 'a-m'];
 
 var margin = {top: 20, right: 50, bottom: 30, left: 20},
         width = 1000 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
-var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .35);
+var x = d3.scaleBand()
+		.range([0, width])
+		.padding(0.35);
 
-var y = d3.scale.linear()
-        .rangeRound([height, 0]);
+var y = d3.scaleLinear()
+        .range([height, 0]);
 
-var color = d3.scale.category20();
+var color = d3.scaleOrdinal(d3.schemeCategory20);
 
-var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
+var xAxis = d3.axisBottom(x)
+	.tickSizeOuter(0);
 
-var svg = d3.select("#chart").append("svg")
+var svg = d3.select("#chart3").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+svg.append("g")
+.attr("transform", "translate(0," + height + ")")
+.attr('class','x-axis')
+.call(xAxis);
 
-var dataIntermediate = xData.map(function (c) {
-    return data.map(function (d) {
-        return {x: d.date, y: d[c]};
-    });
-});
+var dataStackLayout = d3.stack()
+	.keys(keys)
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
 
-var dataStackLayout = d3.layout.stack()(dataIntermediate);
+var layers = dataStackLayout(data);	
 
-x.domain(dataStackLayout[0].map(function (d) {
-    return d.x;
-}));
-
-y.domain([0,
-    d3.max(dataStackLayout[dataStackLayout.length - 1],
-            function (d) { return d.y0 + d.y;})
-    ])
-  .nice();
+x.domain(data.map(function(d) { return d.date; }));
+y.domain([0, 31]).nice();
 
 var layer = svg.selectAll(".stack")
-        .data(dataStackLayout)
+        .data(layers)
         .enter().append("g")
         .attr("class", "stack")
         .style("fill", function (d, i) {
@@ -88,47 +84,36 @@ var layer = svg.selectAll(".stack")
 
 // Render the Rectangles + AAttach tooltips
 layer.selectAll("rect")
-        .data(function (d) {
-            return d;
-        })
+        .data(function(d) { return d; })
         .enter().append("rect")
         .attr("x", function (d) {
-            return x(d.x);
+            return x(d.data.date);
         })
         .attr("y", function (d) {
-            return y(d.y + d.y0);
+            return y(d[1]);
         })
         .attr("height", function (d) {
-            return y(d.y0) - y(d.y + d.y0);
+            return y(d[0]) - y(d[1]);
         })
-        .attr("width", x.rangeBand())
-        .on("mouseover", function() { tooltip.style("display", null); })
+        .attr("width", x.bandwidth())
+        .on("mouseover", function(d) { tooltip.style("display", "block");
+            tooltip.select(".text").html("Sum Of Commits:  " + d[1]); })
         .on("mouseout", function() { tooltip.style("display", "none"); })
         .on("mousemove", function(d) {
             var xPosition = d3.mouse(this)[0] - 15;
             var yPosition = d3.mouse(this)[1] - 25;
-            tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-            tooltip.select("text").text("Sum Of Commits:  " + d.y);
+			
+			tooltip.style('left', (xPosition) + "px");
+			tooltip.style('top', (yPosition) + "px");
             //console.log(xPosition, yPosition)
         });
 
 // Tooltips
-var tooltip = svg.append("g")
-  .style("display", "none");
-    
-tooltip.append("rect")
-  .attr("width", 30)
-  .attr("height", 20)
-  .attr("fill", "white")
-  .style("opacity", 0.5);
+var tooltip = d3.select('#chart3').append("div")
+  .attr('class', 'tooltip');
 
-tooltip.append("text")
-  .attr("x", 15)
-  .attr("dy", "1.2em")
-  .style("text-anchor", "middle")
-  .attr("font-size", "12px")
-  .attr("font-weight", "bold");
-
+tooltip.append('div')
+	.attr('class', 'text');
 
 // Append Axes
 svg.append("g")
@@ -168,51 +153,3 @@ legend.append('text')
                 return "Authors with names starting from N to Z";
             }
         });
-
-/*
-var tooltip = d3.select('#chart') // NEW
-                .append('div') // NEW
-                .attr('class', 'tooltip'); // NEW
-
-tooltip.append('div') // NEW
-        .attr('class', 'label'); // NEW
-
-tooltip.append('div') // NEW
-        .attr('class', 'count'); // NEW
-
-
-var path = svg.selectAll('path')
-                .data(function (d) {
-                    return d;
-                })
-                .enter().append("rect")
-                .attr("x", function (d) {
-                    return x(d.x);
-                })
-                .attr("y", function (d) {
-                    return y(d.y + d.y0);
-                })
-                .attr("height", function (d) {
-                    return y(d.y0) - y(d.y + d.y0);
-                })
-                .attr("width", x.rangeBand());
-
-path.on('mouseover', function(d) { // NEW
-    var total = d3.sum(dataset.map(function(d) {
-        return d.count;
-    }));
-    tooltip.select('.label').html(d.data.label);
-    tooltip.select('.count').html(10);
-    tooltip.style('display', 'block');
-});
-
-path.on('mouseout', function(d) { // NEW
-    tooltip.style('display', 'none');
-});
-
-path.on('mousemove', function(d) {
-    tooltip.style('top', (d3.event.layerY + 10) + 'px')
-            .style('left', (d3.event.layerX + 10) + 'px');
-});
-*/
-

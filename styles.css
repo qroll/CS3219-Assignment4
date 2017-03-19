@@ -1,3 +1,41 @@
+body {
+	margin: 10px;
+}
+
+.objective {
+    background-color: #fff;
+    width: 100%;
+	min-width: 1000px;
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+}
+
+.widget {
+    margin: 0 auto;
+    width:100%;
+    margin-top:50px;
+    background-color:#fff;
+    -background-color: #222D3A;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.3);
+	text-align: center;
+}
+
+.header{
+    background-color: #eee;
+    height:40px;
+    width: 100%;
+    color:#555;
+    text-align: center;
+    line-height: 40px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    font-weight: 400;
+    font-size: 1.5em;
+    text-shadow: 1px 1px #fff;
+    border-bottom: 1px solid #eaeaea;
+}
+
 .legend	{
 	font-size: 12px;
 }
@@ -15,9 +53,7 @@ path {
 }
 
 #chart1 {
-	height: 360px;
 	position: relative;
-	width: 360px;
 }
 
 #chart2 {
@@ -60,47 +96,18 @@ path {
 	padding-top: 10px;
 }
 
+.tooltip .text {
+	font-size: 1em;
+	text-align: center;
+	font-weight: bold;
+}
+
 .selected {
 	font-weight: bold;
 }
 
-.q3body {
-    background-color: #ccc;
-    width: 100%;
-    font-family: 'Roboto', sans-serif;
-    height: 100%;
-}
-
-.widget {
-    margin: 0 auto;
-    width:1100px;
-    margin-top:50px;
-    background-color:#fff;
-    -background-color: #222D3A;
-    border-radius: 5px;
-    box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.3);
-
-}
-
-.header{
-    background-color: #eee;
-    height:40px;
-    width: 1100px;
-    color:#555;
-    text-align: center;
-    line-height: 40px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
-    font-weight: 400;
-    font-size: 1.5em;
-    text-shadow: 1px 1px #fff;
-    border-bottom: 1px solid #eaeaea;
-}
-
-
 .chart3-container{
     padding:25px;
-    width: 1100px;
     height: 550px;
     position: relative;
 }
@@ -115,12 +122,7 @@ path {
 .xAxisQ3-label {
 	position: absolute;
 	top: 525px;
-	width: 1100px;
+	width: 100%;
 	text-align: center;
 	font-weight: bold;
 }
-
-
-
-
-
