@@ -1,10 +1,18 @@
 .legend	{
 	font-size: 12px;
 }
-		
-rect {					
+
+rect {
 	stroke-width: 2;
 }	
+
+path {
+	opacity: 0.75;
+}
+
+.hover {
+	opacity: 1;
+}
 
 #chart1 {
 	height: 360px;
@@ -21,6 +29,7 @@ rect {
 }
 
 .tooltip {
+	border-radius: 5px;
 	width: auto;
 	padding: 10px;
 	background:	#fff;
@@ -31,12 +40,16 @@ rect {
 	position: absolute;
 	z-index: 10;
 	display: none;
+	font-family: 'Roboto', sans-serif;
+	font-size: 0.8em;
 }
 
 .tooltip .label {
+	font-family: 'Roboto Slab', serif;
+	font-size: 1em;
 	text-transform: uppercase;
-	font-weight: narrow;
 	margin-bottom: 10px;
+	white-space: nowrap;
 }
 
 .tooltip .additions::before {
