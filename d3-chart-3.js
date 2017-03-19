@@ -37,22 +37,30 @@ var data = [
 
 var keys = ['n-z', 'a-m'];
 
+// Defining margins in an object
 var margin = {top: 20, right: 50, bottom: 30, left: 20},
         width = 1000 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
+// Defining a scale and setting the range of the x axis
 var x = d3.scaleBand()
 		.range([0, width])
 		.padding(0.35);
 
+// Defining a scale and setting the range of the y axis
 var y = d3.scaleLinear()
         .range([height, 0]);
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
+// Create an axis object that scales according the the ranged defined by x variable before
 var xAxis = d3.axisBottom(x)
 	.tickSizeOuter(0);
 
+// Select HTML placeholder called "chart3"
+// Add "svg" element to it
+// Add "width" and "height" attributes for the svg
+// Group the elements together before translating the entire object by the left and top margins
 var svg = d3.select("#chart3").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -64,6 +72,11 @@ svg.append("g")
 .attr('class','x-axis')
 .call(xAxis);
 
+// Returns an array of 2 data sets
+// First is: [ {x: date, y: sum of commits}, ... ] for authors of name starting with "n-z"
+// Second is: [ {x: date, y: sum of commits}, ... ] for authors of name starting with "a-m"
+// Each element in the input data set represents the data set for 1 layer in the stack component.
+// In this case, we have 2 layers, one for 'a-m' and one for 'n-z'
 var dataStackLayout = d3.stack()
 	.keys(keys)
     .order(d3.stackOrderNone)
@@ -74,6 +87,9 @@ var layers = dataStackLayout(data);
 x.domain(data.map(function(d) { return d.date; }));
 y.domain([0, 31]).nice();
 
+// Creating the svg for the stacked bars svg
+// Feed the data formatted for the stacked graph into the svg
+// Assign its css class to be "stack" and color it
 var layer = svg.selectAll(".stack")
         .data(layers)
         .enter().append("g")
@@ -100,7 +116,7 @@ layer.selectAll("rect")
             tooltip.select(".text").html("Sum Of Commits:  " + d[1]); })
         .on("mouseout", function() { tooltip.style("display", "none"); })
         .on("mousemove", function(d) {
-            var xPosition = d3.mouse(this)[0] - 15;
+            var xPosition = event.pageX - 80;
             var yPosition = d3.mouse(this)[1] - 25;
 			
 			tooltip.style('left', (xPosition) + "px");

@@ -81,7 +81,7 @@ path
 		tooltip.style('top', (d3.mouse(this)[1]) + "px");
 	})
 	.on('mousemove', function(d) {
-		tooltip.style('left', (d3.mouse(this)[0] + 550) + "px");
+		tooltip.style('left', (event.pageX) + "px");
 		tooltip.style('top', (d3.mouse(this)[1] + 250) + "px");
 	})
 	.on('mouseout', function(d) {

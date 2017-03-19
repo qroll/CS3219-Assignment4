@@ -93,14 +93,14 @@ var tooltipMouseover = function(selection) {
 		tooltip.select('.total').html(d.additions + d.deletions + " in total");
 		tooltip.select(selection).classed('selected', true);
 		tooltip.style('display', 'block');
-		tooltip.style('left', (d3.mouse(this)[0]) + "px");
+		tooltip.style('left', (event.pageX) + "px");
 		tooltip.style('top', (d3.mouse(this)[1]) + "px");
 	}
 }
 
 var tooltipMousemove = function(selection) {
 	return function(d) {
-		tooltip.style('left', (d3.mouse(this)[0] + 230) + "px");
+		tooltip.style('left', (event.pageX) + "px");
 		tooltip.style('top', (d3.mouse(this)[1] + 40) + "px");
 	}
 }
