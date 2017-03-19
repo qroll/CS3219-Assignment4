@@ -45,11 +45,13 @@ var margin = {top: 20, right: 50, bottom: 30, left: 20},
 // Defining a scale and setting the range of the x axis
 var x = d3.scaleBand()
 		.range([0, width])
-		.padding(0.35);
+		.padding(0.35)
+        .domain(data.map(function(d) { return d.date; }));
 
 // Defining a scale and setting the range of the y axis
 var y = d3.scaleLinear()
-        .range([height, 0]);
+        .range([height, 0])
+        .domain([0, 31]).nice();
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -67,11 +69,6 @@ var svg = d3.select("#chart3").append("svg")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-svg.append("g")
-.attr("transform", "translate(0," + height + ")")
-.attr('class','x-axis')
-.call(xAxis);
-
 // Returns an array of 2 data sets
 // First is: [ {x: baseline (which equals zero), y: sum of commits}, ... ] for authors of name starting with "n-z"
 // Second is: [ {x: baseline (which equals zero), y: sum of commits}, ... ] for authors of name starting with "a-m"
@@ -84,8 +81,8 @@ var dataStackLayout = d3.stack()
 
 var layers = dataStackLayout(data);	
 
-x.domain(data.map(function(d) { return d.date; }));
-y.domain([0, 31]).nice();
+//x.domain(data.map(function(d) { return d.date; }));
+//y.domain([0, 31]).nice();
 
 // Creating the svg for the stacked bars svg
 // Feed the data formatted for the stacked graph into the svg
@@ -131,7 +128,7 @@ var tooltip = d3.select('#chart3').append("div")
 tooltip.append('div')
 	.attr('class', 'text');
 
-// Append Axes
+// Append Axis
 svg.append("g")
         .attr("class", "xAxisQ3")
         .attr("transform", "translate(0," + height + ")")
